@@ -2,17 +2,29 @@ import { ProductServiceInterface } from "./services/products";
 import { winstonLogger } from "./utils/winstonLogger";
 import { errorResponse, successResponse } from "./utils/apiResponseBuilder";
 
-export const getAllProductsHandler = (productService: ProductServiceInterface) => async (event, _context) => {
+/**
+ * Handler function to get all products.
+ * @param {ProductServiceInterface} productService - An instance of ProductServiceInterface.
+ * @returns {Promise<Object>} - A promise that resolves to the API response.
+ */
+export const getAllProductsHandler = async (event, _context) => {
     try {
-        winstonLogger.logRequest(`Incoming event: ${ JSON.stringify( event ) }`);
+        // Log the incoming event
+        winstonLogger.logRequest(`Incoming event: ${JSON.stringify(event)}`);
 
+        // Assuming ProductServiceInterface is a class, instantiate it
+        const productService = new ProductServiceInterface();
+
+        // Get all products
         const products = await productService.getAllProducts();
 
-        winstonLogger.logRequest(`"Received products: ${ JSON.stringify( products ) }`);
+        // Log the received products
+        winstonLogger.logRequest(`Received products: ${JSON.stringify(products)}`);
 
-        return successResponse( products );
-    } 
-    catch (err) {
-        return errorResponse( err );
+        // Return success response with the products
+        return successResponse(products);
+    } catch (err) {
+        // Return error response in case of an exception
+        return errorResponse(err);
     }
 }
